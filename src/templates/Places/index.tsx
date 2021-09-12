@@ -4,6 +4,7 @@ import LinkWrapper from 'components/Map/LinkWrapper'
 
 import * as S from './styles'
 import { useRouter } from 'next/dist/client/router'
+import { NextSeo } from 'next-seo'
 
 type ImageProps = {
   url: string
@@ -17,6 +18,7 @@ export type PlacesTemplateProps = {
     name: string
     description?: {
       html: string
+      text: string
     }
     gallery: ImageProps[]
   }
@@ -29,6 +31,29 @@ export default function PlacesTemplate({ place }: PlacesTemplateProps) {
 
   return (
     <>
+      <NextSeo
+        title={`${place.name} - My Trips`}
+        description={
+          place.description?.text ||
+          'A simple project to show in a map the places that I went and show more informations and photos when clicked'
+        }
+        canonical="https://www.example.com"
+        openGraph={{
+          url: 'https://www.example.com',
+          title: `${place.name} - My Trips`,
+          description:
+            place.description?.text ||
+            'A simple project to show in a map the places that I went and show more informations and photos when clicked',
+          images: [
+            {
+              url: place.gallery[0].url,
+              width: Number(place.gallery[0].width),
+              height: Number(place.gallery[0].height),
+              alt: `${place.name}`
+            }
+          ]
+        }}
+      />
       <LinkWrapper href="/">
         <CloseOutline size={32} aria-label="Go back to map" />
       </LinkWrapper>
